@@ -190,7 +190,7 @@ void addBook(struct Book books[], int *count)
     int inputValidation = 1;
     printf("Name: ");
     scanf(" %254[^\n]", books[*count].name);
-    printf("Genre: ");
+    printf("Genre (To add more than 1 genre, use this format (Genre1,Genre2)): ");
     scanf("%19s", books[*count].genre);
     printf("Price: ");
     scanf("%lf", &books[*count].price);

@@ -6,7 +6,7 @@ struct Book
 {
   char code[10];
   char name[255];
-  char type[20];
+  char genre[20];
   double price;
   int stock;
 };
@@ -15,7 +15,7 @@ struct purchaseHistory
 {
   char code[10];
   char name[255];
-  char type[20];
+  char genre[20];
   double price;
   int qty;
   int orderID;
@@ -43,7 +43,7 @@ int readBooks(struct Book books[], int maxBooks)
     {
       break;
     }
-    if (fgets(line, sizeof(line), file) && sscanf(line, "Category: %[^\n]", books[count].type) != 1)
+    if (fgets(line, sizeof(line), file) && sscanf(line, "Genre: %[^\n]", books[count].genre) != 1)
     {
       break;
     }
@@ -74,8 +74,8 @@ void writeBooks(struct Book books[], int count)
 
   for (int i = 0; i < count; i++)
   {
-    fprintf(file, "Kode: %s\nName: %s\nCategory: %s\nPrice: %.2lf\nStock: %d\n#\n",
-            books[i].code, books[i].name, books[i].type, books[i].price, books[i].stock);
+    fprintf(file, "Kode: %s\nName: %s\nGenre: %s\nPrice: %.2lf\nStock: %d\n#\n",
+            books[i].code, books[i].name, books[i].genre, books[i].price, books[i].stock);
   }
 
   fclose(file);
@@ -93,8 +93,8 @@ void writePurchaseHistory(struct purchaseHistory history[], int count)
 
   for (int i = 0; i < count; i++)
   {
-    fprintf(file, "Kode: %s\nName: %s\nCategory: %s\nPrice: %.2lf\nQuantity: %d\nOrderID: %d\n#\n",
-            history[i].code, history[i].name, history[i].type, history[i].price, history[i].qty, history[i].orderID);
+    fprintf(file, "Kode: %s\nName: %s\nGenre: %s\nPrice: %.2lf\nQuantity: %d\nOrderID: %d\n#\n",
+            history[i].code, history[i].name, history[i].genre, history[i].price, history[i].qty, history[i].orderID);
   }
 
   fclose(file);
@@ -106,7 +106,7 @@ void displayBooks(struct Book books[], int count)
   printf("Book's List:\n");
   for (int i = 0; i < count; i++)
   {
-    printf("%d. Code: %s, Name: %s, Type: %s, Price: Rp.%.2lf, Stock: %d\n", i + 1, books[i].code, books[i].name, books[i].type, books[i].price, books[i].stock);
+    printf("%d. Code: %s, Name: %s, Genre: %s, Price: Rp.%.2lf, Stock: %d\n", i + 1, books[i].code, books[i].name, books[i].genre, books[i].price, books[i].stock);
   }
 }
 
@@ -190,8 +190,8 @@ void addBook(struct Book books[], int *count)
     int inputValidation = 1;
     printf("Name: ");
     scanf(" %254[^\n]", books[*count].name);
-    printf("Category: ");
-    scanf("%19s", books[*count].type);
+    printf("Genre: ");
+    scanf("%19s", books[*count].genre);
     printf("Price: ");
     scanf("%lf", &books[*count].price);
     printf("Stock: ");
@@ -224,7 +224,7 @@ int readPurchaseHistory(struct purchaseHistory history[], int maxHistory)
     {
       break;
     }
-    if (fgets(line, sizeof(line), file) && sscanf(line, "Category: %[^\n]", history[count].type) != 1)
+    if (fgets(line, sizeof(line), file) && sscanf(line, "Genre: %[^\n]", history[count].genre) != 1)
     {
       break;
     }
@@ -259,8 +259,8 @@ void displayPurchaseHistory(struct purchaseHistory history[], int count)
   printf("Purchase History:\n");
   for (int i = 0; i < count; i++)
   {
-    printf("%d. Order ID: %d, Code: %s, Name: %s, Type: %s, Price: Rp.%.2lf, Quantity: %d\n",
-           i + 1, history[i].orderID, history[i].code, history[i].name, history[i].type, history[i].price, history[i].qty);
+    printf("%d. Order ID: %d, Code: %s, Name: %s, Genre: %s, Price: Rp.%.2lf, Quantity: %d\n",
+           i + 1, history[i].orderID, history[i].code, history[i].name, history[i].genre, history[i].price, history[i].qty);
   }
 }
 
@@ -339,7 +339,7 @@ void purchaseBook(struct Book books[], int *bookCount, struct purchaseHistory hi
       history[*historyCount].orderID = maxOrderID + 1;
       strcpy(history[*historyCount].code, books[bookIndex - 1].code);
       strcpy(history[*historyCount].name, books[bookIndex - 1].name);
-      strcpy(history[*historyCount].type, books[bookIndex - 1].type);
+      strcpy(history[*historyCount].genre, books[bookIndex - 1].genre);
       history[*historyCount].price = books[bookIndex - 1].price * quantity;
       history[*historyCount].qty = quantity;
       (*historyCount)++;
@@ -402,7 +402,14 @@ int main()
       displayPurchaseHistory(pHistory, historyCount);
       break;
     case 3:
-      displayBooks(books, bookCount);
+      if (bookCount > 0)
+      {
+        displayBooks(books, bookCount);
+      }
+      else
+      {
+        printf("There are currently no books in the store, please input more books.\n");
+      }
       break;
     case 4:
       purchaseBook(books, &bookCount, pHistory, &historyCount);

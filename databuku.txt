@@ -1,0 +1,30 @@
+Kode: 111
+Name: Handsome Handsome Warewolf
+Genre: Fantasy,Action,Drama
+Price: 77834.00
+Stock: 8
+#
+Kode: 112
+Name: Starboy
+Genre: Sci-Fi,Action
+Price: 77984.00
+Stock: 6
+#
+Kode: 113
+Name: Slow Down Mr.Driver
+Genre: Racing,Action
+Price: 77545.00
+Stock: 6
+#
+Kode: 114
+Name: EX Memory
+Genre: Drama,Romance
+Price: 134243.00
+Stock: 15
+#
+Kode: 115
+Name: The Adventure of Ilham and Friend I
+Genre: Fantasy,Drama
+Price: 66550.00
+Stock: 3
+#

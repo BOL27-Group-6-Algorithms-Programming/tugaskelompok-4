@@ -425,9 +425,14 @@ int main()
     case 8: // Exit
       if (!saved)
       {
-        writeBooks(books, bookCount);
-        writePurchaseHistory(pHistory, historyCount);
-        printf("Data saved. ");
+        printf("Unsaved changes detected. Do you want to save before exiting? (0 = No | 1 = Yes): ");
+        int saveOption;
+        scanf("%d", &saveOption);
+
+        if (saveOption == 1)
+        {
+          saveChanges(books, bookCount, pHistory, historyCount);
+        }
       }
       printf("Exiting...\n");
       free(books);

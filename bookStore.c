@@ -6,7 +6,7 @@ struct Book
 {
   char code[10];
   char name[255];
-  char genre[20];
+  char genre[255];
   double price;
   int stock;
 };
@@ -103,10 +103,10 @@ void writePurchaseHistory(struct purchaseHistory history[], int count)
 // Function to display the data from databuku.txt
 void displayBooks(struct Book books[], int count)
 {
-  printf("Book's List:\n");
+  printf("\nBook's List:\n");
   for (int i = 0; i < count; i++)
   {
-    printf("%d. Code: %s, Name: %s, Genre: %s, Price: Rp.%.2lf, Stock: %d\n", i + 1, books[i].code, books[i].name, books[i].genre, books[i].price, books[i].stock);
+    printf("%d.| Code: %s, Name: %s, Genre: %s, Price: Rp.%.2lf, Stock: %d |\n", i + 1, books[i].code, books[i].name, books[i].genre, books[i].price, books[i].stock);
   }
 }
 
@@ -191,7 +191,7 @@ void addBook(struct Book books[], int *count)
     printf("Name: ");
     scanf(" %254[^\n]", books[*count].name);
     printf("Genre (To add more than 1 genre, use this format (Genre1,Genre2)): ");
-    scanf("%19s", books[*count].genre);
+    scanf(" %254[^\n]", books[*count].genre);
     printf("Price: ");
     scanf("%lf", &books[*count].price);
     printf("Stock: ");
@@ -252,7 +252,7 @@ void displayPurchaseHistory(struct purchaseHistory history[], int count)
 {
   if (count == 0)
   {
-    printf("Purchase History is empty.\n");
+    printf("You haven't made any purchases\n");
     return;
   }
 
@@ -268,8 +268,13 @@ void displayPurchaseHistory(struct purchaseHistory history[], int count)
 void deletePurchaseHistory(struct purchaseHistory books[], int *count)
 {
   int index;
-  printf("Enter the index of the purchase history to delete: ");
+  printf("Enter the index of the purchase history to delete (or enter 0 to return to the menu): ");
   scanf("%d", &index);
+
+  if (index == 0)
+  {
+    return;
+  }
 
   if (index >= 1 && index <= *count)
   {
@@ -290,8 +295,13 @@ void deletePurchaseHistory(struct purchaseHistory books[], int *count)
 void deleteBook(struct Book books[], int *count)
 {
   int index;
-  printf("Enter the index of the book to delete: ");
+  printf("Enter the index of the book to delete (or enter 0 to return to the menu): ");
   scanf("%d", &index);
+
+  if (index == 0)
+  {
+    return;
+  }
 
   if (index >= 1 && index <= *count)
   {
@@ -309,13 +319,18 @@ void deleteBook(struct Book books[], int *count)
 }
 
 // Function to perform a purchase action
+// Function to perform a purchase action
 void purchaseBook(struct Book books[], int *bookCount, struct purchaseHistory history[], int *historyCount)
 {
-  displayBooks(books, *bookCount);
-
   int bookIndex;
-  printf("Enter the index of the book you want to purchase: ");
+  printf("Enter the index of the book you want to purchase (or enter 0 to return to the menu): ");
   scanf("%d", &bookIndex);
+
+  if (bookIndex == 0)
+  {
+    // User chose to return to the menu
+    return;
+  }
 
   if (bookIndex >= 1 && bookIndex <= *bookCount)
   {
@@ -412,17 +427,31 @@ int main()
       }
       break;
     case 4:
+      displayBooks(books, bookCount);
       purchaseBook(books, &bookCount, pHistory, &historyCount);
       saved = 0;
       break;
     case 5:
-      displayPurchaseHistory(pHistory, historyCount);
-      deletePurchaseHistory(pHistory, &historyCount);
+      if (historyCount >= 1)
+      {
+        displayPurchaseHistory(pHistory, historyCount);
+        deletePurchaseHistory(pHistory, &historyCount);
+      }
+      else
+      {
+        printf("Purchase History is empty.\n");
+      }
       saved = 0;
       break;
     case 6:
-      displayBooks(books, bookCount);
-      deleteBook(books, &bookCount);
+      if (bookCount >= 1)
+      {
+        displayBooks(books, bookCount);
+        deleteBook(books, &bookCount);
+      }
+      else
+        (
+            printf("There are currently no books in the store, please add more book.\n"));
       saved = 0;
       break;
     case 7: // Save Changes

@@ -114,33 +114,33 @@ void displayBooks(struct Book books[], int count)
 void addBook(struct Book books[], int *count)
 {
   char newCode[10];
+  int isCodeValid = 1;
+
   printf("Enter book details:\n");
-  printf("Kode: ");
-  scanf("%9s", newCode);
-
-  // If the book with the same code already exists
-  for (int i = 0; i < *count; i++)
+  do
   {
-    if (strcmp(newCode, books[i].code) == 0)
+    printf("Kode: ");
+    if (scanf("%9s", newCode) != 1)
     {
-      int additionalStock;
-      printf("Book with the same code already exists.\n");
-      printf("Enter additional stock: ");
-      scanf("%d", &additionalStock);
-
-      if (additionalStock > 0)
+      printf("Invalid input. Please enter a valid integer.\n");
+      // Clear the input buffer
+      while (getchar() != '\n')
+        ;
+    }
+    else
+    {
+      int code;
+      if (sscanf(newCode, "%d", &code) == 1 && code > 0)
       {
-        books[i].stock += additionalStock;
-        printf("Stock updated successfully. Total stock: %d\n", books[i].stock);
-        return;
+        isCodeValid = 1;
       }
       else
       {
-        printf("Invalid stock quantity. No changes were made.\n");
-        return;
+        printf("Invalid input. Please enter a valid positive integer.\n");
+        isCodeValid = 0;
       }
     }
-  }
+  } while (!isCodeValid);
 
   // If the book with the same code does not exist, proceed to add it
   strcpy(books[*count].code, newCode);
@@ -283,7 +283,7 @@ void purchaseBook(struct Book books[], int *bookCount, struct purchaseHistory hi
     {
       books[bookIndex - 1].stock -= quantity;
 
-      int maxOrderID = 0; 
+      int maxOrderID = 0;
       for (int i = 0; i < *historyCount; i++)
       {
         if (history[i].orderID > maxOrderID)
@@ -374,8 +374,8 @@ int main()
         printf("Data saved. ");
       }
       printf("Exiting...\n");
-      free(books);    
-      free(pHistory); 
+      free(books);
+      free(pHistory);
       break;
     default:
       printf("Invalid choice. Please try again.\n");

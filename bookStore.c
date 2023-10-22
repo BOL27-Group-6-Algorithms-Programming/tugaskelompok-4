@@ -116,7 +116,7 @@ void addBook(struct Book books[], int *count)
   char newCode[10];
   int isCodeValid = 1;
 
-  printf("Enter book details:\n");
+  printf("\nEnter book details:\n");
   do
   {
     printf("Kode: ");
@@ -357,6 +357,13 @@ void purchaseBook(struct Book books[], int *bookCount, struct purchaseHistory hi
   }
 }
 
+void saveChanges(struct Book books[], int bookCount, struct purchaseHistory history[], int historyCount)
+{
+  writeBooks(books, bookCount);
+  writePurchaseHistory(history, historyCount);
+  printf("\n\033[0;32mChanges Saved\033[0m\n");
+}
+
 int main()
 {
   struct Book *books = malloc(sizeof(struct Book) * 100);
@@ -378,8 +385,9 @@ int main()
     printf("4. Purchase\n");
     printf("5. Delete History\n");
     printf("6. Delete Book\n");
-    printf("7. Exit\n\n");
-    printf("Enter your choice (1 - 7): ");
+    printf("7. Save Changes\n");
+    printf("8. Exit\n\n");
+    printf("Enter your choice (1 - 8): ");
 
     scanf("%d", &option);
 
@@ -410,7 +418,11 @@ int main()
       deleteBook(books, &bookCount);
       saved = 0;
       break;
-    case 7:
+    case 7: // Save Changes
+      saveChanges(books, bookCount, pHistory, historyCount);
+      saved = 1; // Mark the changes as saved
+      break;
+    case 8: // Exit
       if (!saved)
       {
         writeBooks(books, bookCount);
@@ -422,9 +434,9 @@ int main()
       free(pHistory);
       break;
     default:
-      printf("Invalid choice. Please try again.\n");
+      printf("\033[1;38;5;196mInvalid Choices. Please input within range of 1-8.\033[0m\n");
     }
-  } while (option != 7);
+  } while (option != 8);
 
   return 0;
 }

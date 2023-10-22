@@ -142,20 +142,64 @@ void addBook(struct Book books[], int *count)
     }
   } while (!isCodeValid);
 
+  int editExistingBook = 0;
+
+  // If the book with the same code already exists
+  for (int i = 0; i < *count; i++)
+  {
+    if (strcmp(newCode, books[i].code) == 0)
+    {
+      int additionalStock;
+      int option;
+
+      printf("Book with the same code already exists. Do you want to edit this book stock? (0 = No | 1 = Yes) ");
+      scanf(" %d", &option);
+
+      if (option == 0)
+      {
+        return; // Exit the function without making any changes
+      }
+      else if (option == 1)
+      {
+        editExistingBook = 1;
+        printf("Enter additional stock (the value you input will be added with the initial stock value): ");
+        scanf("%d", &additionalStock);
+
+        if (additionalStock > 0)
+        {
+          books[i].stock += additionalStock;
+          printf("Stock updated successfully. Total stock: %d\n", books[i].stock);
+        }
+        else
+        {
+          printf("Invalid stock quantity. No changes were made.\n");
+        }
+      }
+      else
+      {
+        printf("Invalid option. No changes were made.\n");
+      }
+    }
+  }
+
   // If the book with the same code does not exist, proceed to add it
-  strcpy(books[*count].code, newCode);
+  if (!editExistingBook)
+  {
+    strcpy(books[*count].code, newCode);
 
-  printf("Name: ");
-  scanf(" %254[^\n]", books[*count].name);
-  printf("Category: ");
-  scanf("%19s", books[*count].type);
-  printf("Price: ");
-  scanf("%lf", &books[*count].price);
-  printf("Stock: ");
-  scanf("%d", &books[*count].stock);
+    int inputValidation = 1;
+    printf("Name: ");
+    scanf(" %254[^\n]", books[*count].name);
+    printf("Category: ");
+    scanf("%19s", books[*count].type);
+    printf("Price: ");
+    scanf("%lf", &books[*count].price);
+    printf("Stock: ");
+    scanf("%d", &books[*count].stock);
 
-  (*count)++;
-  printf("Book added successfully.\n");
+    (*count)++;
+    printf("Book added successfully.\n");
+  }
 }
 
 // Function to read purchase history from datapembelian.txt
